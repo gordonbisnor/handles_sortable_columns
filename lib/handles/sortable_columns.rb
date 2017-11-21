@@ -274,7 +274,7 @@ module Handles  #:nodoc:
         conf[k = :default_sort_value] = sortable_columns_config[k]
 
         # Parse sort param.
-        sort = params[conf[:sort_param]] || conf[:default_sort_value]
+        sort = params.permit(conf[:sort_param])[conf[:sort_param]] || conf[:default_sort_value]
         pp = parse_sortable_column_sort_param(sort)
 
         order = if block
