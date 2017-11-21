@@ -192,7 +192,7 @@ module Handles  #:nodoc:
         raise "Unknown option(s): #{options.inspect}" if not options.empty?
 
         # Parse sort param.
-        sort = params[conf[:sort_param]] || conf[:default_sort_value]
+        sort = params.permit(conf[:sort_param])[conf[:sort_param]] || conf[:default_sort_value]
         pp = parse_sortable_column_sort_param(sort)
 
         css_class = []
@@ -218,9 +218,9 @@ module Handles  #:nodoc:
         # Already sorted?
         if pp[:column] == o[:column].to_s
           if o[:route_proxy]
-            url = o[:route_proxy].send(:url_for, params.merge({conf[:sort_param] => [("-" if pp[:direction] == :asc), o[:column]].join, conf[:page_param] => 1}))
+            url = o[:route_proxy].send(:url_for, params.permit(conf[:sort_param]).merge({conf[:sort_param] => [("-" if pp[:direction] == :asc), o[:column]].join, conf[:page_param] => 1}))
           else
-            url = url_for(params.merge({conf[:sort_param] => [("-" if pp[:direction] == :asc), o[:column]].join, conf[:page_param] => 1}))
+            url = url_for(params.permit(conf[:sort_param]).merge({conf[:sort_param] => [("-" if pp[:direction] == :asc), o[:column]].join, conf[:page_param] => 1}))
           end
           pcs << tpl.link_to(title, url, html_options)       # Opposite sort order when clicked.
 
@@ -231,9 +231,9 @@ module Handles  #:nodoc:
         else
           # Not sorted.
           if o[:route_proxy]
-            url = o[:route_proxy].send(:url_for, params.merge({conf[:sort_param] => [("-" if o[:direction] != :asc), o[:column]].join, conf[:page_param] => 1}))
+            url = o[:route_proxy].send(:url_for, params.permit(conf[:sort_param]).merge({conf[:sort_param] => [("-" if o[:direction] != :asc), o[:column]].join, conf[:page_param] => 1}))
           else
-            url = url_for(params.merge({conf[:sort_param] => [("-" if o[:direction] != :asc), o[:column]].join, conf[:page_param] => 1}))
+            url = url_for(params.permit(conf[:sor_param]).merge({conf[:sort_param] => [("-" if o[:direction] != :asc), o[:column]].join, conf[:page_param] => 1}))
           end
           pcs << tpl.link_to(title, url, html_options)
         end
